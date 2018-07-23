@@ -3,8 +3,42 @@ const path = require('path');
 const glob = require('glob');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const root = path.resolve(__dirname, '..');
+const entriesAndHtml = buildingEntriesAndHTML();
 
-
+const base = {
+    entry: entriesAndHtml.entries,
+    output: {
+        filename: '[name].js',
+        path: root + '/dist'
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['env']
+                    }
+                },
+                exclude: /(node_modules|bower_components)/
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    {loader: 'style-loader'},
+                    {loader: 'css-loader'}
+                ]
+            },
+            {
+                test: /\.less$/,
+                use: {
+                    loader: 'less-loader'
+                }
+            }
+        ]
+    }
+};
 
 
 function buildingEntriesAndHTML() {
@@ -23,9 +57,11 @@ function buildingEntriesAndHTML() {
             template: `./${pathObj.dir}/index.html`,
             chunks: [item]
         }))
-    })
+    });
     return {
         entries,
         htmls
     }
 }
+
+module.exports = base
