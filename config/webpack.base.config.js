@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const glob = require('glob');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const root = path.resolve(__dirname, '..');
 const entriesAndHtml = buildingEntriesAndHTML();
 
@@ -26,9 +27,10 @@ const base = {
             {
                 test: /\.css$/,
                 use: [
-                    {loader: 'style-loader'},
-                    {loader: 'css-loader'},
-                    {loader: 'postcss-loader'}
+                    'css-hot-loader',
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'postcss-loader'
                 ]
             },
             {
@@ -36,9 +38,45 @@ const base = {
                 use: {
                     loader: 'less-loader'
                 }
+            },
+            {
+                test: /\.(png|jpg|gif)$/,
+                use: [{
+                    loader: 'file-loader'
+                }]
+            },
+            {
+                test: /\.(png|jpg|gif)$/,
+                use: [{
+                    loader: 'url-loader', // base64
+                    options: {
+                        limit: 8192
+                    }
+                }]
+            },
+            {
+                test: '/\.html$/',
+                use: [
+                    {
+                        loader: 'html-loader',
+                        options: {
+                            interpolate: 'require'
+                        }
+                    }
+                ]
             }
         ]
-    }
+    },
+    plugins: [
+        new webpack.ProvidePlugin({ //加载jq
+            $: 'jquery'
+        }),
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+            chunkFilename: '[id].css'
+        }),
+        ...entriesAndHtml.htmls
+    ]
 };
 
 
