@@ -90,11 +90,13 @@ function buildingEntriesAndHTML() {
     const htmls = [];
     result.forEach(item => {
         const pathObj = path.parse(item);
-        entries[pathObj.dir.split('/').slice(-1)[0]] = './' + item; // 构建entry
+        const outputfile = pathObj.dir.split("/").slice(-1)[0];
+        entries[outputfile] = './' + item; // 构建entry
         htmls.push(new HtmlWebpackPlugin({
             ...config,
+            filename: outputfile === "index" ? "./index.html" : "./" + outputfile + "/index.html", // 输出html文件的路径
             template: `./${pathObj.dir}/index.html`,
-            chunks: [item]
+            chunks: [outputfile]
         }))
     });
     return {
