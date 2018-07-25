@@ -1,5 +1,6 @@
+import './index.css'
 console.log('this is page2');
-let a = async function () {
+async function a () {
     let b = await pro();
     console.log(b)
 }

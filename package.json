@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/c0710/website-cli#readme",
   "devDependencies": {
+    "autoprefixer": "^9.0.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-plugin-transform-runtime": "^6.23.0",

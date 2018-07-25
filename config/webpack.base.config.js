@@ -9,7 +9,7 @@ const entriesAndHtml = buildingEntriesAndHTML();
 const base = {
     entry: entriesAndHtml.entries,
     output: {
-        filename: '[name].js',
+        filename: 'js/[name].js',
         path: root + '/dist'
     },
     module: {
@@ -18,9 +18,6 @@ const base = {
                 test: /\.js$/,
                 use: {
                     loader: 'babel-loader',
-                    options: {
-                        presets: ['env']
-                    }
                 },
                 exclude: /(node_modules|bower_components)/
             },
@@ -35,9 +32,13 @@ const base = {
             },
             {
                 test: /\.less$/,
-                use: {
-                    loader: 'less-loader'
-                }
+                use: [
+                    'css-hot-loader',
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'postcss-loader',
+                    'less-loader'
+                ]
             },
             {
                 test: /\.(png|jpg|gif)$/,
@@ -72,11 +73,14 @@ const base = {
             $: 'jquery'
         }),
         new MiniCssExtractPlugin({
-            filename: '[name].css',
+            filename: 'css/[name].[hash:8].css',
             chunkFilename: '[id].css'
         }),
         ...entriesAndHtml.htmls
-    ]
+    ],
+    resolve: {
+        extensions: [".js", ".json", ".jsx", ".css"]
+    },
 };
 
 
@@ -85,7 +89,7 @@ function buildingEntriesAndHTML() {
     const config = {
         hash: true,
         inject: true
-    }
+    };
     const entries = {};
     const htmls = [];
     result.forEach(item => {
@@ -94,7 +98,7 @@ function buildingEntriesAndHTML() {
         entries[outputfile] = './' + item; // 构建entry
         htmls.push(new HtmlWebpackPlugin({
             ...config,
-            filename: outputfile === "index" ? "./index.html" : "./" + outputfile + "/index.html", // 输出html文件的路径
+            filename: outputfile === "home" ? "./index.html" : "./" + outputfile + "/index.html", // 输出html文件的路径
             template: `./${pathObj.dir}/index.html`,
             chunks: [outputfile]
         }))
