@@ -70,7 +70,8 @@ const base = {
     },
     plugins: [
         new webpack.ProvidePlugin({ //加载jq
-            $: 'jquery'
+            $: 'jquery',
+            jQuery: 'jquery'
         }),
         new MiniCssExtractPlugin({
             filename: 'css/[name].[hash:8].css',
