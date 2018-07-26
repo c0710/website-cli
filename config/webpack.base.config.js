@@ -10,7 +10,8 @@ const base = {
     entry: entriesAndHtml.entries,
     output: {
         filename: 'js/[name].js',
-        path: root + '/dist'
+        path: root + '/dist',
+        publicPath: "/"
     },
     module: {
         rules: [
@@ -43,16 +44,7 @@ const base = {
             {
                 test: /\.(png|jpg|gif)$/,
                 use: [{
-                    loader: 'file-loader'
-                }]
-            },
-            {
-                test: /\.(png|jpg|gif)$/,
-                use: [{
-                    loader: 'url-loader', // base64
-                    options: {
-                        limit: 8192
-                    }
+                    loader: 'url-loader?limit=8192&name=images/[name].[hash:8].[ext]'
                 }]
             },
             {
@@ -75,7 +67,8 @@ const base = {
         }),
         new MiniCssExtractPlugin({
             filename: 'css/[name].[hash:8].css',
-            chunkFilename: '[id].css'
+            chunkFilename: '[id].css',
+            publicPath: '../'
         }),
         ...entriesAndHtml.htmls
     ],
