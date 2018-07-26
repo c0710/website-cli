@@ -9,9 +9,9 @@ const entriesAndHtml = buildingEntriesAndHTML();
 const base = {
     entry: entriesAndHtml.entries,
     output: {
-        filename: 'js/[name].js',
+        filename: 'js/[name].[hash:8].js',
         path: root + '/dist',
-        publicPath: "/"
+        publicPath: "https://c0710.gitee.io/test/"
     },
     module: {
         rules: [
@@ -53,7 +53,9 @@ const base = {
                     {
                         loader: 'html-loader',
                         options: {
-                            interpolate: 'require'
+                            interpolate: 'require',
+                            minimize: true,
+                            attrs: ['assets:src', 'assets:data-src', 'audio:src']
                         }
                     }
                 ]
@@ -67,7 +69,7 @@ const base = {
         }),
         new MiniCssExtractPlugin({
             filename: 'css/[name].[hash:8].css',
-            chunkFilename: '[id].css',
+            // chunkFilename: '[id].css',
             publicPath: '../'
         }),
         ...entriesAndHtml.htmls
