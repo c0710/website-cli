@@ -1,0 +1,24 @@
+{
+  "name": "website-cli",
+  "version": "1.0.0",
+  "description": "成 混淆、压缩、less脚手架 （webpack4填坑）",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/c0710/website-cli.git"
+  },
+  "author": "Evannn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/c0710/website-cli/issues"
+  },
+  "homepage": "https://github.com/c0710/website-cli#readme",
+  "devDependencies": {
+    "glob": "^7.1.2",
+    "rimraf": "^2.6.2",
+    "webpack": "^4.16.1"
+  }
+}
