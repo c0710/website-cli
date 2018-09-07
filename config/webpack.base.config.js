@@ -12,7 +12,6 @@ const base = {
 	output: {
 		filename: 'js/[name].js',
 		path: root + '/dist',
-		publicPath: "/"
 	},
 	module: {
 		rules: [
