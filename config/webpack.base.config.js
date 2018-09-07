@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const root = path.resolve(__dirname, '..');
 const entriesAndHtml = buildingEntriesAndHTML();
+const isDev = process.env.NODE_ENV === 'development';
 
 const base = {
 	entry: entriesAndHtml.entries,
@@ -26,6 +27,7 @@ const base = {
 				test: /\.css$/,
 				use: [
 					'css-hot-loader',
+
 					MiniCssExtractPlugin.loader,
 					'css-loader',
 					'postcss-loader'
@@ -35,7 +37,12 @@ const base = {
 				test: /\.less$/,
 				use: [
 					'css-hot-loader',
-					MiniCssExtractPlugin.loader,
+                    isDev?'style-loader': {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: '../'
+                        },
+                    },
 					'css-loader',
 					'postcss-loader',
 					'less-loader'
@@ -43,10 +50,13 @@ const base = {
 			},
 			{
 				test: /\.(png|jpg|gif)$/,
-				use: [{
-					loader: 'url-loader?limit=8192&name=images/[name].[hash:8].[ext]'
-				}]
-			},
+				loader: 'url-loader',
+                options: {
+                    limit: 100,
+                    name: 'img/[name].[hash:7].[ext]',
+                }
+             },
+
 			{
 				test: '/\.html$/',
 				use: [
@@ -103,4 +113,7 @@ function buildingEntriesAndHTML() {
 	}
 }
 
+console.log('-----------------------')
+console.log(process.env.NODE_ENV)
+console.log('-----------------------')
 module.exports = base
