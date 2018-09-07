@@ -8,7 +8,10 @@ const entriesAndHtml = buildingEntriesAndHTML();
 const isDev = process.env.NODE_ENV === 'development';
 
 const base = {
-	entry: entriesAndHtml.entries,
+	entry: {
+		...entriesAndHtml.entries,
+		jquery: 'jquery'
+	},
 	output: {
 		filename: 'js/[name].js',
 		path: root + '/dist',
@@ -69,10 +72,20 @@ const base = {
 			}
 		]
 	},
+    optimization: {
+        splitChunks: {
+            cacheGroups: { // 单独提取JS文件引入html
+                aaa: { // 键值可以自定义
+                    chunks: 'initial', //
+                    name: 'jquery', // 入口的entry的key
+                    enforce: true   // 强制
+                }
+            }
+        }
+    },
 	plugins: [
 		new webpack.ProvidePlugin({ //加载jq
 			$: 'jquery',
-			jQuery: 'jquery'
 		}),
 		new MiniCssExtractPlugin({
 			filename: 'css/[name].[hash:8].css',
@@ -103,7 +116,7 @@ function buildingEntriesAndHTML() {
 			...config,
 			filename: outputfile === "home" ? "./index.html" : "./" + outputfile + "/index.html", // 输出html文件的路径
 			template: `./${pathObj.dir}/index.html`,
-			chunks: [outputfile]
+			chunks: [outputfile, 'jquery']
 		}))
 	});
 	return {
